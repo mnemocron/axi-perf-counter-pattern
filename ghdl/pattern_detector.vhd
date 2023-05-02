@@ -55,7 +55,9 @@ end pattern_detector;
 
 architecture arch_imp of pattern_detector is
 
-  constant C_NUM_COMPARISONS : integer := (C_S_AXIS_TDATA_WIDTH/C_COMPARE_DATA_WIDTH);
+  constant C_NUM_DATA_BYTES : integer  := (C_S_AXIS_TDATA_WIDTH/8);
+  constant C_NUM_COMP_BYTES : integer  := (C_COMPARE_DATA_WIDTH/8);
+  constant C_NUM_COMPARISONS : integer := (C_NUM_DATA_BYTES - C_NUM_COMP_BYTES +1);
 
   -- signals
   signal aclk    : std_logic;
@@ -68,7 +70,6 @@ architecture arch_imp of pattern_detector is
 
   signal o_match_out     : std_logic;
   signal match_accumulator : std_logic_vector(C_NUM_COMPARISONS-1 downto 0);
-
 
 begin
   -- I/O connections assignments
@@ -92,7 +93,7 @@ begin
           match_accumulator(ii) <= '0';
         else
           if i_s_axis_tvalid = '1' and i_m_axis_tready = '1' then
-            if i_s_axis_tdata( (ii+1)*C_COMPARE_DATA_WIDTH-1 downto ii*C_COMPARE_DATA_WIDTH ) = i_pattern then
+            if i_s_axis_tdata( (ii)*8-1 + C_COMPARE_DATA_WIDTH  downto ii*8 ) = i_pattern then 
               match_accumulator(ii) <= '1';
             else
               match_accumulator(ii) <= '0';
@@ -104,8 +105,6 @@ begin
       end if;
     end process;
   end generate gen_alligned_pattern_detect;
-
--- o_match_out <= '0' when unsigned(match_accumulator) = 0 else '1';
 
   p_final_decision : process(aclk)
   begin

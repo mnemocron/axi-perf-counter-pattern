@@ -41,7 +41,7 @@ entity tb_myip is
   (
     C_S_AXI_DATA_WIDTH   : integer := 32;
     C_S_AXI_ADDR_WIDTH   : integer := 5;
-    C_S_AXIS_TDATA_WIDTH : integer := 64
+    C_S_AXIS_TDATA_WIDTH : integer := 512
   );
 end tb_myip;
 
@@ -85,6 +85,9 @@ architecture bh of tb_myip is
   end component;
 
   constant CLK_PERIOD: TIME := 5 ns;
+  -- +8 bits creates an offset, so that the pattern is not 32 bit alligned
+  constant PATTERN_TOP : integer := 31+8;
+  constant PATTERN_LOW : integer := 0+8;
 
   signal clk   : std_logic;
   signal rst_n : std_logic;
@@ -156,18 +159,18 @@ begin
         stop_axis_tready <= '1';
       else
         if unsigned(clk_count) = 19 then
-          start_axis_tdata(C_S_AXIS_TDATA_WIDTH-1 downto 32) <= (others => '0');
-          start_axis_tdata(31 downto 0) <= x"deadbeef";
+          start_axis_tdata(C_S_AXIS_TDATA_WIDTH-1 downto PATTERN_TOP+1) <= (others => '0');
+          start_axis_tdata(PATTERN_TOP downto PATTERN_LOW) <= x"deadbeef";
           start_axis_tvalid <= '1';
         end if;
         if unsigned(clk_count) = 20 then
-          start_axis_tdata(C_S_AXIS_TDATA_WIDTH-1 downto 32) <= (others => '0');
-          start_axis_tdata(31 downto 0) <= x"aabbccdd";
+          start_axis_tdata(C_S_AXIS_TDATA_WIDTH-1 downto PATTERN_TOP+1) <= (others => '0');
+          start_axis_tdata(PATTERN_TOP downto PATTERN_LOW) <= x"aabbccdd";
           start_axis_tvalid <= '1';
         end if;
         if unsigned(clk_count) = 21 then
-          start_axis_tdata(C_S_AXIS_TDATA_WIDTH-1 downto 32) <= (others => '0');
-          start_axis_tdata(31 downto 0) <= x"1F1F1F1F";
+          start_axis_tdata(C_S_AXIS_TDATA_WIDTH-1 downto PATTERN_TOP+1) <= (others => '0');
+          start_axis_tdata(PATTERN_TOP downto PATTERN_LOW) <= x"1F1F1F1F";
           start_axis_tvalid <= '1';
         end if;
         if unsigned(clk_count) = 22 then
