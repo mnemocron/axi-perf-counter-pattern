@@ -1,5 +1,5 @@
 $date
-  Tue May 02 12:00:11 2023
+  Fri May 05 13:44:39 2023
 $end
 $version
   GHDL v0
@@ -66,10 +66,10 @@ $var reg 1 P s_axi_rvalid $end
 $var reg 1 Q s_axi_rready $end
 $var reg 1 R s00_axis_tvalid $end
 $var reg 512 S s00_axis_tdata[511:0] $end
-$var reg 1 T m00_axis_tready $end
+$var reg 1 T s00_axis_tready $end
 $var reg 1 U s01_axis_tvalid $end
 $var reg 512 V s01_axis_tdata[511:0] $end
-$var reg 1 W m01_axis_tready $end
+$var reg 1 W s01_axis_tready $end
 $var reg 5 X axi_awaddr[4:0] $end
 $var reg 1 Y axi_awready $end
 $var reg 1 Z axi_wready $end
@@ -101,14 +101,14 @@ $var reg 1 r axis_aclk $end
 $var reg 1 s axis_aresetn $end
 $var reg 1 t s_axis_tvalid $end
 $var reg 512 u s_axis_tdata[511:0] $end
-$var reg 1 v m_axis_tready $end
+$var reg 1 v s_axis_tready $end
 $var reg 32 w compare_pattern[31:0] $end
 $var reg 1 x match_out $end
 $var reg 1 y aclk $end
 $var reg 1 z aresetn $end
 $var reg 1 { i_s_axis_tvalid $end
 $var reg 512 | i_s_axis_tdata[511:0] $end
-$var reg 1 } i_m_axis_tready $end
+$var reg 1 } i_s_axis_tready $end
 $var reg 32 !" i_pattern[31:0] $end
 $var reg 1 "" o_match_out $end
 $var reg 61 #" match_accumulator[60:0] $end
@@ -240,14 +240,14 @@ $var reg 1 $" axis_aclk $end
 $var reg 1 %" axis_aresetn $end
 $var reg 1 &" s_axis_tvalid $end
 $var reg 512 '" s_axis_tdata[511:0] $end
-$var reg 1 (" m_axis_tready $end
+$var reg 1 (" s_axis_tready $end
 $var reg 32 )" compare_pattern[31:0] $end
 $var reg 1 *" match_out $end
 $var reg 1 +" aclk $end
 $var reg 1 ," aresetn $end
 $var reg 1 -" i_s_axis_tvalid $end
 $var reg 512 ." i_s_axis_tdata[511:0] $end
-$var reg 1 /" i_m_axis_tready $end
+$var reg 1 /" i_s_axis_tready $end
 $var reg 32 0" i_pattern[31:0] $end
 $var reg 1 1" o_match_out $end
 $var reg 61 2" match_accumulator[60:0] $end

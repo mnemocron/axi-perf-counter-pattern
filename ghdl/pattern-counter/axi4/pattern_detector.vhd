@@ -45,7 +45,7 @@ entity pattern_detector is
     -- TDATA is the primary payload that is used to provide the data that is passing across the interface from the master.
     S_AXIS_TDATA    : in  std_logic_vector(C_S_AXIS_TDATA_WIDTH-1 downto 0);
     -- TREADY indicates that the slave can accept a transfer in the current cycle.
-    M_AXIS_TREADY   : in  std_logic;
+    S_AXIS_TREADY   : in  std_logic;
     
     compare_pattern : in std_logic_vector(C_COMPARE_DATA_WIDTH-1 downto 0);
 
@@ -65,7 +65,7 @@ architecture arch_imp of pattern_detector is
 
   signal i_s_axis_tvalid : std_logic := '0';
   signal i_s_axis_tdata  : std_logic_vector(C_S_AXIS_TDATA_WIDTH-1 downto 0);
-  signal i_m_axis_tready : std_logic;
+  signal i_s_axis_tready : std_logic;
   signal i_pattern       : std_logic_vector(C_COMPARE_DATA_WIDTH-1 downto 0);
 
   signal o_match_out     : std_logic;
@@ -77,7 +77,7 @@ begin
   aresetn <= AXIS_ARESETN;
 
   -- inputs
-  i_m_axis_tready <= M_AXIS_TREADY;
+  i_s_axis_tready <= S_AXIS_TREADY;
   i_s_axis_tvalid <= S_AXIS_TVALID;
   i_s_axis_tdata  <= S_AXIS_TDATA;
   i_pattern <= compare_pattern;
@@ -92,7 +92,7 @@ begin
         if aresetn = '0' then
           match_accumulator(ii) <= '0';
         else
-          if i_s_axis_tvalid = '1' and i_m_axis_tready = '1' then
+          if i_s_axis_tvalid = '1' and i_s_axis_tready = '1' then
             if i_s_axis_tdata( (ii)*8-1 + C_COMPARE_DATA_WIDTH  downto ii*8 ) = i_pattern then 
               match_accumulator(ii) <= '1';
             else

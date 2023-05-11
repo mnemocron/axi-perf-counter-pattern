@@ -2,7 +2,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity axis_latency_counter is
+entity axi4_latency_counter is
 	generic (
 		-- Users to add parameters here
 
@@ -85,17 +85,17 @@ entity axis_latency_counter is
 	    -- AXIS Start
 	    S00_AXIS_TVALID : in  std_logic;
 	    S00_AXIS_TDATA  : in  std_logic_vector(C_S_AXIS_TDATA_WIDTH-1 downto 0);
-	    M00_AXIS_TREADY : in  std_logic;
+	    S00_AXIS_TREADY : in  std_logic;
 
 	    -- AXIS Stop
 	    S01_AXIS_TVALID : in  std_logic;
 	    S01_AXIS_TDATA  : in  std_logic_vector(C_S_AXIS_TDATA_WIDTH-1 downto 0);
-	    M01_AXIS_TREADY : in  std_logic
+	    S01_AXIS_TREADY : in  std_logic
 
 	);
-end axis_latency_counter;
+end axi4_latency_counter;
 
-architecture arch_imp of axis_latency_counter is
+architecture arch_imp of axi4_latency_counter is
 	component pattern_detector is
 		generic (
 		  C_S_AXIS_TDATA_WIDTH  : integer;
@@ -106,7 +106,7 @@ architecture arch_imp of axis_latency_counter is
 		  AXIS_ARESETN    : in  std_logic;
 		  S_AXIS_TVALID   : in  std_logic;
 		  S_AXIS_TDATA    : in  std_logic_vector(C_S_AXIS_TDATA_WIDTH-1 downto 0);
-		  M_AXIS_TREADY   : in  std_logic;
+		  S_AXIS_TREADY   : in  std_logic;
 		  compare_pattern : in  std_logic_vector(C_COMPARE_DATA_WIDTH-1 downto 0);
 		  match_out       : out std_logic
 		);
@@ -501,7 +501,7 @@ begin
 	      AXIS_ARESETN    => S_AXI_ARESETN,
 	      S_AXIS_TVALID   => S00_AXIS_TVALID,
 	      S_AXIS_TDATA    => S00_AXIS_TDATA,
-	      M_AXIS_TREADY   => M00_AXIS_TREADY,
+	      S_AXIS_TREADY   => S00_AXIS_TREADY,
 	      compare_pattern => slv_reg2,
 	      match_out       => trg_start
 	    );
@@ -516,7 +516,7 @@ begin
 		  AXIS_ARESETN    => S_AXI_ARESETN,
 		  S_AXIS_TVALID   => S01_AXIS_TVALID,
 		  S_AXIS_TDATA    => S01_AXIS_TDATA,
-		  M_AXIS_TREADY   => M01_AXIS_TREADY,
+		  S_AXIS_TREADY   => S01_AXIS_TREADY,
 		  compare_pattern => slv_reg3,
 		  match_out       => trg_stop
 		);

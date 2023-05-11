@@ -1,0 +1,55 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Thu May 11 13:05:11 2023
+[*]
+[dumpfile] "C:\Users\simon\Downloads\P9\ghdl-axi-sim\axi-perf-counter-pattern\ghdl\pattern-trigger\event-counter\wave.vcd"
+[dumpfile_mtime] "Thu May 11 13:04:23 2023"
+[dumpfile_size] 16418
+[savefile] "C:\Users\simon\Downloads\P9\ghdl-axi-sim\axi-perf-counter-pattern\ghdl\pattern-trigger\event-counter\waveform.gtkw"
+[timestart] 0
+[size] 3378 1061
+[pos] -1 -1
+*-25.000000 172600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_myip.
+[treeopen] tb_myip.myip_inst.
+[sst_width] 224
+[signals_width] 416
+[sst_expanded] 1
+[sst_vpaned_height] 440
+@24
+tb_myip.clk_count[7:0]
+@28
+tb_myip.clk
+tb_myip.rst_n
+tb_myip.axi_awvalid
+@22
+tb_myip.axi_awaddr[4:0]
+@28
+tb_myip.axi_awready
+tb_myip.axi_wvalid
+@22
+tb_myip.axi_wdata[31:0]
+@28
+tb_myip.axi_wready
+tb_myip.axi_bvalid
+tb_myip.axi_bresp[1:0]
+tb_myip.axi_bready
+tb_myip.axi_arvalid
+@22
+tb_myip.axi_araddr[4:0]
+@28
+tb_myip.axi_arready
+tb_myip.axi_rvalid
+@24
+[color] 3
+tb_myip.axi_rdata[31:0]
+@28
+tb_myip.axi_rready
+tb_myip.axi_rresp[1:0]
+tb_myip.myip_inst.trg_start
+tb_myip.myip_inst.trg_stop
+@24
+[color] 3
+tb_myip.myip_inst.slv_reg0[31:0]
+[pattern_trace] 1
+[pattern_trace] 0
