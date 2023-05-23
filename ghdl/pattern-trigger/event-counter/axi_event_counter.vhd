@@ -1,8 +1,32 @@
+----------------------------------------------------------------------------------
+-- Company:        
+-- Engineer:       simon.burkhardt
+-- 
+-- Create Date:    2023-05-15
+-- Design Name:    axi_event_counter
+-- Module Name:    
+-- Project Name:   
+-- Target Devices: 
+-- Tool Versions:  GHDL 0.37
+-- Description:    
+-- 
+-- Dependencies:   
+-- 
+-- Revision:
+-- Revision 0.01 - File Created
+-- Revision 1.0 - simulation working 
+-- Revision 1.1 - added software start/stop triggers via slave registers 
+-- Revision 1.2 - fix start/stop not reseting to 0 when written as 1
+-- Revision 1.3 - added pulse elongation to CDC synchronization to capture pulses from faster clock domains
+-- Additional Comments:
+-- 
+----------------------------------------------------------------------------------
+
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity axis_latency_counter is
+entity axi_event_counter is
     generic (
         -- Users to add parameters here
 
@@ -12,8 +36,7 @@ entity axis_latency_counter is
         -- Width of S_AXI data bus
         C_S_AXI_DATA_WIDTH   : integer  := 32;
         -- Width of S_AXI address bus
-        C_S_AXI_ADDR_WIDTH   : integer  := 5;
-        C_S_AXIS_TDATA_WIDTH : integer := 512
+        C_S_AXI_ADDR_WIDTH   : integer  := 5
     );
     port (
         -- Users to add ports here
@@ -84,13 +107,15 @@ entity axis_latency_counter is
 
         -- counter start trigger
         trg_a    : in std_logic;
+        clk_a    : in std_logic;
 
         -- counter stop trigger
-        trg_y    : in std_logic
+        trg_b    : in std_logic;
+        clk_b    : in std_logic 
     );
-end axis_latency_counter;
+end axi_event_counter;
 
-architecture arch_imp of axis_latency_counter is
+architecture arch_imp of axi_event_counter is
     -- AXI4LITE signals
     signal axi_awaddr   : std_logic_vector(C_S_AXI_ADDR_WIDTH-1 downto 0);
     signal axi_awready  : std_logic;
@@ -131,20 +156,24 @@ architecture arch_imp of axis_latency_counter is
     signal count_en : std_logic;
     signal trg_start : std_logic;
     signal trg_stop  : std_logic;
-
+    
+    signal trg_a_inp   : std_logic;
+    signal trg_a_reg_a : std_logic;
+    signal trg_a_elong : std_logic;
     signal trg_a_async : std_logic;
     signal trg_a_meta  : std_logic;
     signal trg_a_reg   : std_logic;
 
-    signal trg_y_async : std_logic;
-    signal trg_y_meta  : std_logic;
-    signal trg_y_reg   : std_logic;
+    signal trg_b_inp   : std_logic;
+    signal trg_b_reg_b : std_logic;
+    signal trg_b_elong : std_logic;
+    signal trg_b_async : std_logic;
+    signal trg_b_meta  : std_logic;
+    signal trg_b_reg   : std_logic;
 
     attribute ASYNC_REG : string;
     attribute ASYNC_REG of trg_a_async : signal is "TRUE"; 
-    -- attribute ASYNC_REG of trg_a_meta  : signal is "TRUE"; 
-    attribute ASYNC_REG of trg_y_async : signal is "TRUE"; 
-    -- attribute ASYNC_REG of trg_y_meta  : signal is "TRUE"; 
+    attribute ASYNC_REG of trg_b_async : signal is "TRUE"; 
 begin
     -- I/O Connections assignments
 
@@ -156,6 +185,27 @@ begin
     S_AXI_RDATA <= axi_rdata;
     S_AXI_RRESP <= axi_rresp;
     S_AXI_RVALID    <= axi_rvalid;
+
+    trg_a_async <= trg_a_elong;
+    trg_b_async <= trg_b_elong;
+    trg_a_inp <= trg_a;
+    trg_b_inp <= trg_b;
+    
+    p_pulse_elongation_a : process(clk_a)
+    begin
+        if rising_edge(clk_a) then
+            trg_a_reg_a <= trg_a_inp;
+            trg_a_elong <= trg_a_reg_a or trg_a_inp;
+        end if;
+    end process;
+    
+    p_pulse_elongation_b : process(clk_b)
+    begin
+        if rising_edge(clk_b) then
+            trg_b_reg_b <= trg_b_inp;
+            trg_b_elong <= trg_b_reg_b or trg_b_inp;
+        end if;
+    end process;
 
     p_inp_clk_sync_a : process(S_AXI_ACLK)
     begin
@@ -174,18 +224,16 @@ begin
     begin
         if rising_edge(S_AXI_ACLK) then
             if S_AXI_ARESETN = '0' then
-                trg_y_meta <= '0';
-                trg_y_reg <= '0';
+                trg_b_meta <= '0';
+                trg_b_reg <= '0';
             else
-                trg_y_meta <= trg_y_async;
-                trg_y_reg <= trg_y_meta;
+                trg_b_meta <= trg_b_async;
+                trg_b_reg <= trg_b_meta;
             end if;
         end if;
     end process;
 
-    trg_a_async <= trg_a;
-    trg_y_async <= trg_y;
-    trg_stop <= trg_y_reg;
+    trg_stop <= trg_b_reg;
     trg_start <= trg_a_reg;
 
     p_cnt_en : process(S_AXI_ACLK)
@@ -194,9 +242,9 @@ begin
         if S_AXI_ARESETN = '0' then
             count_en <= '0';
         else
-            if trg_stop = '1' then
+            if (trg_stop = '1') or (slv_reg2(0 downto 0) = "1") then
                 count_en <= '0';
-            elsif trg_start = '1' then
+            elsif (trg_start = '1') or (slv_reg1(0 downto 0) = "1") then
                 count_en <= '1';
             else
                 count_en <= count_en;
@@ -377,6 +425,11 @@ begin
                 slv_reg7 <= slv_reg7;
             end case;
           else
+            if count_en = '1' then
+                slv_reg1 <= (others => '0');
+            else
+                slv_reg2 <= (others => '0');
+            end if;
             if count_en = '1' then
               slv_reg0 <= std_logic_vector(unsigned(slv_reg0) +1);
             end if;
