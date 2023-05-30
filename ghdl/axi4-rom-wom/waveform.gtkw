@@ -1,0 +1,88 @@
+[*]
+[*] GTKWave Analyzer v3.3.100 (w)1999-2019 BSI
+[*] Tue May 30 14:21:04 2023
+[*]
+[dumpfile] "C:\Users\simon\Downloads\P9\repositories\axi4-rom\wave.vcd"
+[dumpfile_mtime] "Tue May 30 14:20:41 2023"
+[dumpfile_size] 25882
+[savefile] "C:\Users\simon\Downloads\P9\repositories\axi4-rom\waveform.gtkw"
+[timestart] 0
+[size] 1858 1057
+[pos] -1 -1
+*-26.000000 658800000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_axis.
+[sst_width] 224
+[signals_width] 343
+[sst_expanded] 1
+[sst_vpaned_height] 314
+@24
+[color] 5
+tb_axis.clk_count[7:0]
+@28
+[color] 3
+tb_axis.clk
+[color] 3
+tb_axis.rst_n
+tb_axis.axi_converter_inst.s_axi_awvalid
+tb_axis.axi_converter_inst.s_axi_awready
+tb_axis.axi_converter_inst.s_axi_awburst[1:0]
+@22
+tb_axis.axi_converter_inst.s_axi_awlen[7:0]
+@28
+tb_axis.axi_converter_inst.s_axi_awsize[2:0]
+tb_axis.axi_converter_inst.s_axi_awid[2:0]
+[color] 2
+tb_axis.axi_converter_inst.s_axi_wvalid
+[color] 2
+tb_axis.axi_converter_inst.s_axi_wready
+@24
+[color] 2
+tb_axis.axi_converter_inst.s_axi_wdata[7:0]
+@28
+[color] 2
+tb_axis.axi_converter_inst.s_axi_wlast
+[color] 2
+tb_axis.axi_converter_inst.s_axi_wstrb[0]
+[color] 3
+tb_axis.axi_converter_inst.s_axi_bvalid
+[color] 3
+tb_axis.axi_converter_inst.s_axi_bready
+[color] 3
+tb_axis.axi_converter_inst.s_axi_bresp[1:0]
+[color] 3
+tb_axis.axi_converter_inst.s_axi_bid[2:0]
+tb_axis.axi_converter_inst.bresp_pending
+@23
+[color] 5
+tb_axis.outstanding_writes[7:0]
+@22
+[color] 5
+tb_axis.axi_converter_inst.s_axi_araddr[7:0]
+@28
+tb_axis.axi_converter_inst.s_axi_arsize[2:0]
+@22
+tb_axis.axi_converter_inst.s_axi_arlen[7:0]
+@28
+tb_axis.axi_converter_inst.s_axi_arready
+tb_axis.axi_converter_inst.s_axi_arvalid
+@22
+[color] 2
+tb_axis.axi_converter_inst.s_axi_rdata[7:0]
+@28
+[color] 2
+tb_axis.axi_converter_inst.s_axi_rid[2:0]
+[color] 2
+tb_axis.axi_converter_inst.s_axi_rlast
+[color] 2
+tb_axis.axi_converter_inst.s_axi_rready
+[color] 2
+tb_axis.axi_converter_inst.s_axi_rresp[1:0]
+[color] 2
+tb_axis.axi_converter_inst.s_axi_rvalid
+@22
+[color] 5
+tb_axis.outstanding_reads[7:0]
+tb_axis.axi_converter_inst.n_read_beats[7:0]
+tb_axis.axi_converter_inst.read_burst_count[7:0]
+[pattern_trace] 1
+[pattern_trace] 0
